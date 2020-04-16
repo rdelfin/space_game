@@ -1,8 +1,21 @@
 use ggez::event::{self, EventHandler};
 use ggez::{graphics, Context, ContextBuilder, GameResult};
 
+use std::env;
+use std::path;
+
 fn main() {
+    let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
+        Ok(manifest_dir) => {
+            let mut path = path::PathBuf::from(manifest_dir);
+            path.push("resources");
+            path
+        }
+        Err(_) => path::PathBuf::from("./resources"),
+    };
+
     let (mut ctx, mut event_loop) = ContextBuilder::new("my_game", "Ricardo Delfin")
+        .add_resource_path(resource_dir)
         .build()
         .expect("Could not create ggez context");
 
