@@ -1,8 +1,13 @@
+mod player;
+
+use anyhow;
 use ggez::event::{self, EventHandler};
-use ggez::{graphics, Context, ContextBuilder, GameResult};
+use ggez::{graphics, Context, ContextBuilder};
 
 use std::env;
 use std::path;
+
+use player::Player;
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -19,7 +24,7 @@ fn main() {
         .build()
         .expect("Could not create ggez context");
 
-    let mut my_game = MyGame::new(&mut ctx);
+    let mut my_game = MyGame::new(&mut ctx).unwrap();
 
     match event::run(&mut ctx, &mut event_loop, &mut my_game) {
         Ok(_) => println!("Exited cleanly."),
@@ -27,22 +32,27 @@ fn main() {
     }
 }
 
-struct MyGame {}
+struct MyGame {
+    player: Player,
+}
 
 impl MyGame {
-    pub fn new(_ctx: &mut Context) -> MyGame {
-        MyGame {}
+    pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
+        Ok(MyGame {
+            player: Player::new(ctx)?,
+        })
     }
 }
 
 impl EventHandler for MyGame {
-    fn update(&mut self, _ctx: &mut Context) -> GameResult<()> {
+    fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
+        self.player.update(ctx)?;
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+    fn draw(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         graphics::clear(ctx, graphics::WHITE);
-
-        graphics::present(ctx)
+        self.player.draw(ctx)?;
+        Ok(graphics::present(ctx)?)
     }
 }

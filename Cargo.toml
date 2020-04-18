@@ -5,4 +5,6 @@ authors = ["Ricardo Delfin <me@rdelfin.com>"]
 edition = "2018"
 
 [dependencies]
-ggez = "0.5.1"
+anyhow = "1.0.28"
+ggez = { git = "https://github.com/rdelfin/ggez" }
+thiserror = "1.0.15"
