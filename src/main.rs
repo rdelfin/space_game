@@ -13,7 +13,7 @@ fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
         Ok(manifest_dir) => {
             let mut path = path::PathBuf::from(manifest_dir);
-            path.push("resources");
+            path.push("assets");
             path
         }
         Err(_) => path::PathBuf::from("./resources"),
