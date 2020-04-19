@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate enum_display_derive;
+
 mod player;
 
 use anyhow;
