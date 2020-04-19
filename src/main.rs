@@ -1,6 +1,7 @@
 mod player;
 
 use anyhow;
+use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::{graphics, Context, ContextBuilder};
 
@@ -21,6 +22,8 @@ fn main() {
 
     let (mut ctx, mut event_loop) = ContextBuilder::new("my_game", "Ricardo Delfin")
         .add_resource_path(resource_dir)
+        .window_setup(WindowSetup::default().title("Game Test (rdelfin)"))
+        .window_mode(WindowMode::default().dimensions(2000.0, 2000.0))
         .build()
         .expect("Could not create ggez context");
 

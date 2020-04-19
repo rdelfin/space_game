@@ -7,5 +7,4 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0.28"
 ggez = { git = "https://github.com/rdelfin/ggez" }
-nalgebra = "0.21.0"
 thiserror = "1.0.15"
