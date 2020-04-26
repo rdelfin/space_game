@@ -427,6 +427,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ecs"
+version = "0.23.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "vec_map 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "enum-display-derive"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1714,6 +1722,7 @@ name = "space_game"
 version = "0.1.0"
 dependencies = [
  "anyhow 1.0.28 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ecs 0.23.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "enum-display-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "ggez 0.5.1 (git+https://github.com/rdelfin/ggez)",
  "thiserror 1.0.15 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1899,6 +1908,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "uuid"
 version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "vec_map"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -2175,6 +2189,7 @@ dependencies = [
 "checksum dlib 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "77e51249a9d823a4cb79e3eca6dcd756153e8ed0157b6c04775d04bf1b13b76a"
 "checksum downcast-rs 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "52ba6eb47c2131e784a38b726eb54c1e1484904f013e576a25354d0124161af6"
 "checksum draw_state 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "33cf9537e2d06891448799b96d5a8c8083e0e90522a7fdabe6ebf4f41d79d651"
+"checksum ecs 0.23.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5b979204e55400197597993276bca9822a34ddfc95d2329991efbb255bb1cca7"
 "checksum enum-display-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "53f76eb63c4bfc6fce5000f106254701b741fc9a65ee08445fde0ff39e583f1c"
 "checksum error-chain 0.12.2 (registry+https://github.com/rust-lang/crates.io-index)" = "d371106cc88ffdfb1eabd7111e432da544f16f3e2d7bf1dfe8bf575f1df045cd"
 "checksum euclid 0.19.9 (registry+https://github.com/rust-lang/crates.io-index)" = "596b99621b9477e7a5f94d2d8dd13a9c5c302ac358b822c67a42b6f1054450e1"
@@ -2344,6 +2359,7 @@ dependencies = [
 "checksum unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 "checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"
 "checksum uuid 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9fde2f6a4bea1d6e007c4ad38c6839fa71cbb63b6dbf5b595aa38dc9b1093c11"
+"checksum vec_map 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1805118a0d7c72d427e9d9c8134b549ec9e88942c707b100deef357ec0948f02"
 "checksum vec_map 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "05c78687fb1a80548ae3250346c3db86a80a7cdd77bda190189f2d0a0987c81a"
 "checksum version_check 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)" = "078775d0255232fb988e6fccf26ddc9d1ac274299aaedcedce21c6f72cc533ce"
 "checksum void 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)" = "6a02e4885ed3bc0f2de90ea6dd45ebcbb66dacffe03547fadbb0eeae2770887d"
