@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate enum_display_derive;
+#[macro_use]
+extern crate specs;
 
+mod components;
 mod player;
 
 use anyhow;
@@ -8,11 +11,10 @@ use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::nalgebra::Vector2;
 use ggez::{graphics, Context, ContextBuilder};
+use specs::prelude::{Builder, Entity, World, WorldExt};
 
 use std::env;
 use std::path;
-
-use player::Player;
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -40,26 +42,38 @@ fn main() {
 }
 
 struct MyGame {
-    player: Player,
+    world: World,
+    entities: Vec<Entity>,
 }
 
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
-        Ok(MyGame {
-            player: Player::new(ctx)?,
-        })
+        let mut game = MyGame {
+            world: World::new(),
+            entities: vec![],
+        };
+
+        game.world.register::<components::Position>();
+        game.world.register::<components::Velocity>();
+
+        game.entities.push(
+            game.world
+                .create_entity()
+                .with(components::Position { x: 10.0, y: 3.0 })
+                .build(),
+        );
+
+        Ok(game)
     }
 }
 
 impl EventHandler for MyGame {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
-        self.player.update(ctx)?;
         Ok(())
     }
 
     fn draw(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         graphics::clear(ctx, graphics::WHITE);
-        self.player.draw(ctx)?;
         Ok(graphics::present(ctx)?)
     }
 }
