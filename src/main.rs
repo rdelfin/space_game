@@ -12,7 +12,7 @@ use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::nalgebra::Point2;
 use ggez::{graphics, Context, ContextBuilder};
-use specs::prelude::{Builder, Entity, World, WorldExt};
+use specs::prelude::{Builder, Dispatcher, DispatcherBuilder, Entity, World, WorldExt};
 use specs::RunNow;
 
 use std::env;
@@ -76,6 +76,11 @@ impl MyGame {
 
 impl EventHandler for MyGame {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
+        let mut dispatcher = DispatcherBuilder::new()
+            .with(systems::SpriteAnimation, "sprite_animation", &[])
+            .build();
+        dispatcher.dispatch(&mut self.world);
+        self.world.maintain();
         Ok(())
     }
 
