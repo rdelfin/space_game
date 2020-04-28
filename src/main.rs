@@ -10,13 +10,14 @@ mod systems;
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
-use ggez::nalgebra::Vector2;
+use ggez::nalgebra::Point2;
 use ggez::{graphics, Context, ContextBuilder};
 use specs::prelude::{Builder, Entity, World, WorldExt};
 use specs::RunNow;
 
 use std::env;
 use std::path;
+use std::time::Duration;
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -25,7 +26,7 @@ fn main() {
             path.push("assets");
             path
         }
-        Err(_) => path::PathBuf::from("./resources"),
+        Err(_) => path::PathBuf::from("./assets"),
     };
 
     let (mut ctx, mut event_loop) = ContextBuilder::new("my_game", "Ricardo Delfin")
@@ -55,10 +56,18 @@ impl MyGame {
 
         game.world.register::<components::Position>();
         game.world.register::<components::Velocity>();
+        game.world.register::<components::Sprite>();
 
         game.world
             .create_entity()
             .with(components::Position { x: 10.0, y: 3.0 })
+            .with(components::Velocity { dx: 0.0, dy: 0.0 })
+            .with(components::Sprite::new(
+                ctx,
+                "/idle.png",
+                Point2::new(15, 1),
+                Duration::from_millis(40),
+            )?)
             .build();
 
         Ok(game)
@@ -67,14 +76,16 @@ impl MyGame {
 
 impl EventHandler for MyGame {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
-        let mut hello_world = systems::HelloWorld;
-        hello_world.run_now(&self.world);
-        self.world.maintain();
         Ok(())
     }
 
     fn draw(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         graphics::clear(ctx, graphics::WHITE);
+        {
+            let mut renderer = systems::RenderSystem::new(ctx);
+            renderer.run_now(&self.world);
+            self.world.maintain();
+        }
         Ok(graphics::present(ctx)?)
     }
 }
