@@ -45,25 +45,21 @@ fn main() {
 
 struct MyGame {
     world: World,
-    entities: Vec<Entity>,
 }
 
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
         let mut game = MyGame {
             world: World::new(),
-            entities: vec![],
         };
 
         game.world.register::<components::Position>();
         game.world.register::<components::Velocity>();
 
-        game.entities.push(
-            game.world
-                .create_entity()
-                .with(components::Position { x: 10.0, y: 3.0 })
-                .build(),
-        );
+        game.world
+            .create_entity()
+            .with(components::Position { x: 10.0, y: 3.0 })
+            .build();
 
         Ok(game)
     }
