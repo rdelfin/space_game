@@ -5,6 +5,7 @@ extern crate specs;
 
 mod components;
 mod player;
+mod systems;
 
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
@@ -12,6 +13,7 @@ use ggez::event::{self, EventHandler};
 use ggez::nalgebra::Vector2;
 use ggez::{graphics, Context, ContextBuilder};
 use specs::prelude::{Builder, Entity, World, WorldExt};
+use specs::RunNow;
 
 use std::env;
 use std::path;
@@ -69,6 +71,9 @@ impl MyGame {
 
 impl EventHandler for MyGame {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
+        let mut hello_world = systems::HelloWorld;
+        hello_world.run_now(&self.world);
+        self.world.maintain();
         Ok(())
     }
 
