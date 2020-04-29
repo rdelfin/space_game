@@ -98,6 +98,7 @@ impl EventHandler for MyGame {
 
         let mut dispatcher = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
+            .with(systems::PhysicsEngine, "physics_engine", &[])
             .build();
         dispatcher.dispatch(&mut self.world);
         self.world.maintain();
