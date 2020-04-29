@@ -1,8 +1,3 @@
-#[macro_use]
-extern crate enum_display_derive;
-#[macro_use]
-extern crate specs;
-
 mod components;
 mod resources;
 mod systems;
@@ -11,9 +6,8 @@ use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::nalgebra::{Point2, Vector2};
-use ggez::{graphics, timer, Context, ContextBuilder};
-use specs::prelude::{Builder, Dispatcher, DispatcherBuilder, Entity, World, WorldExt};
-use specs::shred::FetchMut;
+use ggez::{graphics, Context, ContextBuilder};
+use specs::prelude::{Builder, DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
 use std::env;

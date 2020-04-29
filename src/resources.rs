@@ -32,10 +32,12 @@ impl KeyboardState {
         !self.is_pressed(key)
     }
 
+    #[allow(dead_code)]
     pub fn just_pressed(&self, key: KeyCode) -> bool {
         self.is_pressed(key) && !self.previously_pressed.contains(&key)
     }
 
+    #[allow(dead_code)]
     pub fn just_released(&self, key: KeyCode) -> bool {
         self.is_released(key) && self.previously_pressed.contains(&key)
     }

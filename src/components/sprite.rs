@@ -4,7 +4,7 @@ use ggez::nalgebra::Point2;
 use ggez::Context;
 use specs::prelude::{Component, VecStorage};
 
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 #[derive(Debug)]
 pub struct Sprite {

@@ -3,8 +3,6 @@ use crate::resources::DeltaTime;
 
 use specs::{Read, System, WriteStorage};
 
-use std::time::Instant;
-
 pub struct SpriteAnimation;
 
 impl<'a> System<'a> for SpriteAnimation {
