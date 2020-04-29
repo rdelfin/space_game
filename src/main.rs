@@ -57,6 +57,7 @@ impl MyGame {
         world.register::<components::Position>();
         world.register::<components::Velocity>();
         world.register::<components::Acceleration>();
+        world.register::<components::UserControlled>();
         world.register::<components::Sprite>();
 
         world
@@ -64,6 +65,7 @@ impl MyGame {
             .with(components::Position(Point2::new(10.0, 3.0)))
             .with(components::Velocity(Vector2::new(0.0, 0.0)))
             .with(components::Acceleration(Vector2::new(0.0, 0.0)))
+            .with(components::UserControlled)
             .with(components::Sprite::new(
                 ctx,
                 "/idle.png",
@@ -101,8 +103,17 @@ impl EventHandler for MyGame {
         self.update_resources(ctx);
 
         let mut dispatcher = DispatcherBuilder::new()
-            .with(systems::SpriteAnimation, "sprite_animation", &[])
-            .with(systems::PhysicsEngine, "physics_engine", &[])
+            .with(systems::ControllerSystem, "controller_system", &[])
+            .with(
+                systems::PhysicsEngine,
+                "physics_engine",
+                &["controller_system"],
+            )
+            .with(
+                systems::SpriteAnimation,
+                "sprite_animation",
+                &["physics_engine", "controller_system"],
+            )
             .build();
         dispatcher.dispatch(&mut self.world);
         self.world.maintain();
