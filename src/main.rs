@@ -4,7 +4,6 @@ extern crate enum_display_derive;
 extern crate specs;
 
 mod components;
-mod player;
 mod resources;
 mod systems;
 
