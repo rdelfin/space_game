@@ -61,7 +61,7 @@ impl MyGame {
 
         world
             .create_entity()
-            .with(components::Position(Vector2::new(10.0, 3.0)))
+            .with(components::Position(Point2::new(10.0, 3.0)))
             .with(components::Velocity(Vector2::new(0.0, 0.0)))
             .with(components::Acceleration(Vector2::new(0.0, 0.0)))
             .with(components::Sprite::new(

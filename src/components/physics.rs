@@ -1,8 +1,8 @@
-use ggez::nalgebra::Vector2;
+use ggez::nalgebra::{Point2, Vector2};
 use specs::prelude::{Component, VecStorage};
 
 #[derive(Debug)]
-pub struct Position(pub Vector2<f32>);
+pub struct Position(pub Point2<f32>);
 
 impl Component for Position {
     type Storage = VecStorage<Self>;
