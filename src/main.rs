@@ -5,6 +5,7 @@ extern crate specs;
 
 mod components;
 mod player;
+mod resources;
 mod systems;
 
 use anyhow;
@@ -19,9 +20,6 @@ use specs::RunNow;
 use std::env;
 use std::path;
 use std::time::Duration;
-
-#[derive(Default)]
-struct DeltaTime(Duration);
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -72,7 +70,7 @@ impl MyGame {
             )?)
             .build();
 
-        world.insert(DeltaTime::default());
+        world.insert(resources::DeltaTime::default());
 
         Ok(MyGame {
             world,
@@ -86,8 +84,8 @@ impl MyGame {
         if self.first_frame {
             self.first_frame = false;
         } else {
-            let mut delta = self.world.write_resource::<DeltaTime>();
-            *delta = DeltaTime(timer::delta(ctx));
+            let mut delta = self.world.write_resource::<resources::DeltaTime>();
+            (*delta).update(ctx);
         }
     }
 }
