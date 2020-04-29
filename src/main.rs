@@ -11,13 +11,17 @@ use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::nalgebra::Point2;
-use ggez::{graphics, Context, ContextBuilder};
+use ggez::{graphics, timer, Context, ContextBuilder};
 use specs::prelude::{Builder, Dispatcher, DispatcherBuilder, Entity, World, WorldExt};
+use specs::shred::FetchMut;
 use specs::RunNow;
 
 use std::env;
 use std::path;
 use std::time::Duration;
+
+#[derive(Default)]
+struct DeltaTime(Duration);
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -46,19 +50,17 @@ fn main() {
 
 struct MyGame {
     world: World,
+    first_frame: bool,
 }
 
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
-        let mut game = MyGame {
-            world: World::new(),
-        };
+        let mut world = World::new();
+        world.register::<components::Position>();
+        world.register::<components::Velocity>();
+        world.register::<components::Sprite>();
 
-        game.world.register::<components::Position>();
-        game.world.register::<components::Velocity>();
-        game.world.register::<components::Sprite>();
-
-        game.world
+        world
             .create_entity()
             .with(components::Position { x: 10.0, y: 3.0 })
             .with(components::Velocity { dx: 0.0, dy: 0.0 })
@@ -70,12 +72,30 @@ impl MyGame {
             )?)
             .build();
 
-        Ok(game)
+        world.insert(DeltaTime::default());
+
+        Ok(MyGame {
+            world,
+            first_frame: true,
+        })
+    }
+
+    fn update_resources(&mut self, ctx: &mut Context) {
+        // First frame will include the loading times for images and resources, so we want to skip
+        // it when getting time.
+        if self.first_frame {
+            self.first_frame = false;
+        } else {
+            let mut delta = self.world.write_resource::<DeltaTime>();
+            *delta = DeltaTime(timer::delta(ctx));
+        }
     }
 }
 
 impl EventHandler for MyGame {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
+        self.update_resources(ctx);
+
         let mut dispatcher = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
             .build();
