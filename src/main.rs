@@ -73,6 +73,7 @@ impl MyGame {
             .build();
 
         world.insert(resources::DeltaTime::default());
+        world.insert(resources::KeyboardState::default());
 
         Ok(MyGame {
             world,
@@ -87,8 +88,11 @@ impl MyGame {
             self.first_frame = false;
         } else {
             let mut delta = self.world.write_resource::<resources::DeltaTime>();
-            (*delta).update(ctx);
+            delta.update(ctx);
         }
+
+        let mut key_state = self.world.write_resource::<resources::KeyboardState>();
+        key_state.update(ctx);
     }
 }
 
