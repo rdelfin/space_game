@@ -40,8 +40,6 @@ impl<'a> System<'a> for ControllerSystem {
             } else {
                 vel.0.y = 200.0;
             }
-
-            println!("VEL: {:?}", vel);
         }
     }
 }
