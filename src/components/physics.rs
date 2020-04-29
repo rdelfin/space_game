@@ -1,21 +1,23 @@
+use ggez::nalgebra::Vector2;
 use specs::prelude::{Component, VecStorage};
 
 #[derive(Debug)]
-pub struct Position {
-    pub x: f32,
-    pub y: f32,
-}
+pub struct Position(pub Vector2<f32>);
 
 impl Component for Position {
     type Storage = VecStorage<Self>;
 }
 
 #[derive(Debug)]
-pub struct Velocity {
-    pub dx: f32,
-    pub dy: f32,
-}
+pub struct Velocity(pub Vector2<f32>);
 
 impl Component for Velocity {
+    type Storage = VecStorage<Self>;
+}
+
+#[derive(Debug)]
+pub struct Acceleration(pub Vector2<f32>);
+
+impl Component for Acceleration {
     type Storage = VecStorage<Self>;
 }

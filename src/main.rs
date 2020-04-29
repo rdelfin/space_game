@@ -11,7 +11,7 @@ mod systems;
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
-use ggez::nalgebra::Point2;
+use ggez::nalgebra::{Point2, Vector2};
 use ggez::{graphics, timer, Context, ContextBuilder};
 use specs::prelude::{Builder, Dispatcher, DispatcherBuilder, Entity, World, WorldExt};
 use specs::shred::FetchMut;
@@ -56,12 +56,14 @@ impl MyGame {
         let mut world = World::new();
         world.register::<components::Position>();
         world.register::<components::Velocity>();
+        world.register::<components::Acceleration>();
         world.register::<components::Sprite>();
 
         world
             .create_entity()
-            .with(components::Position { x: 10.0, y: 3.0 })
-            .with(components::Velocity { dx: 0.0, dy: 0.0 })
+            .with(components::Position(Vector2::new(10.0, 3.0)))
+            .with(components::Velocity(Vector2::new(0.0, 0.0)))
+            .with(components::Acceleration(Vector2::new(0.0, 0.0)))
             .with(components::Sprite::new(
                 ctx,
                 "/idle.png",
