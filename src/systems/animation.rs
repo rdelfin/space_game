@@ -1,41 +1,35 @@
 use crate::components::Sprite;
+use crate::resources::DeltaTime;
 
-use specs::{System, WriteStorage};
+use specs::{Read, System, WriteStorage};
 
 use std::time::Instant;
 
 pub struct SpriteAnimation;
 
 impl<'a> System<'a> for SpriteAnimation {
-    type SystemData = (WriteStorage<'a, Sprite>);
+    type SystemData = (Read<'a, DeltaTime>, WriteStorage<'a, Sprite>);
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut sprites) = data;
+        let (delta, mut sprites) = data;
+
+        let delta = delta.0;
+
         use specs::Join;
-
         for sprite in (&mut sprites).join() {
-            let now = Instant::now();
-            match sprite.last_frame_time {
-                None => {
-                    sprite.last_frame_time = Some(now);
-                }
-                Some(t) => {
-                    sprite.frame_time += (now - t);
-                    sprite.last_frame_time = Some(now);
-                    if sprite.frame_time >= sprite.time_per_frame {
-                        sprite.frame_time -= sprite.time_per_frame;
-                        sprite.curr_frame.x += 1;
-                    }
+            sprite.frame_time += delta;
+            if sprite.frame_time >= sprite.time_per_frame {
+                sprite.frame_time -= sprite.time_per_frame;
+                sprite.curr_frame.x += 1;
+            }
 
-                    if sprite.curr_frame.x >= sprite.sheet_size.x {
-                        sprite.curr_frame.x = 0;
-                        sprite.curr_frame.y += 1;
-                    }
+            if sprite.curr_frame.x >= sprite.sheet_size.x {
+                sprite.curr_frame.x = 0;
+                sprite.curr_frame.y += 1;
+            }
 
-                    if sprite.curr_frame.y >= sprite.sheet_size.y {
-                        sprite.curr_frame.y = 0;
-                    }
-                }
+            if sprite.curr_frame.y >= sprite.sheet_size.y {
+                sprite.curr_frame.y = 0;
             }
         }
     }
