@@ -1,16 +1,6 @@
 use ggez::input::keyboard::{self, KeyCode};
-use ggez::{timer, Context};
+use ggez::Context;
 use std::collections::HashSet;
-use std::time::Duration;
-
-#[derive(Default)]
-pub struct DeltaTime(pub Duration);
-
-impl DeltaTime {
-    pub fn update(&mut self, ctx: &mut Context) {
-        self.0 = timer::delta(ctx);
-    }
-}
 
 #[derive(Default)]
 pub struct KeyboardState {
