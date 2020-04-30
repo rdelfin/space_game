@@ -1,4 +1,5 @@
 mod components;
+mod entities;
 mod resources;
 mod systems;
 
@@ -6,14 +7,13 @@ use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, FilterMode};
-use ggez::nalgebra::{Point2, Vector2};
+use ggez::nalgebra::Point2;
 use ggez::{Context, ContextBuilder};
-use specs::prelude::{Builder, DispatcherBuilder, World, WorldExt};
+use specs::prelude::{DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
 use std::env;
 use std::path;
-use std::time::Duration;
 
 fn main() {
     let resource_dir = match env::var("CARGO_MANIFEST_DIR") {
@@ -56,19 +56,7 @@ impl MyGame {
         world.register::<components::UserControlled>();
         world.register::<components::Sprite>();
 
-        world
-            .create_entity()
-            .with(components::Position(Point2::new(10.0, 3.0)))
-            .with(components::Velocity(Vector2::new(0.0, 0.0)))
-            .with(components::Acceleration(Vector2::new(0.0, 0.0)))
-            .with(components::UserControlled)
-            .with(components::Sprite::new(
-                ctx,
-                "/idle.png",
-                Point2::new(15, 1),
-                Duration::from_millis(40),
-            )?)
-            .build();
+        entities::UnitFactory::new_triangle(ctx, &mut world, Point2::new(100.0, 100.0))?;
 
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
