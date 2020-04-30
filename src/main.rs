@@ -5,8 +5,9 @@ mod systems;
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
+use ggez::graphics::{self, FilterMode};
 use ggez::nalgebra::{Point2, Vector2};
-use ggez::{graphics, Context, ContextBuilder};
+use ggez::{Context, ContextBuilder};
 use specs::prelude::{Builder, DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
@@ -46,6 +47,8 @@ struct MyGame {
 
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
+        graphics::set_default_filter(ctx, FilterMode::Nearest);
+
         let mut world = World::new();
         world.register::<components::Position>();
         world.register::<components::Velocity>();
