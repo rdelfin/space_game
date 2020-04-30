@@ -1,6 +1,6 @@
 use anyhow::Result;
 use ggez::graphics::Image;
-use ggez::nalgebra::Point2;
+use ggez::nalgebra::{Point2, Vector2};
 use ggez::Context;
 use specs::prelude::{Component, VecStorage};
 
@@ -13,6 +13,7 @@ pub struct Sprite {
     pub curr_frame: Point2<usize>,
     pub frame_time: Duration,
     pub time_per_frame: Duration,
+    pub scale: Vector2<f32>,
 }
 
 impl Component for Sprite {
@@ -25,6 +26,7 @@ impl Sprite {
         img_path: &str,
         sheet_size: Point2<usize>,
         time_per_frame: Duration,
+        scale: Vector2<f32>,
     ) -> Result<Sprite> {
         Ok(Sprite {
             spritesheet: Image::new(ctx, img_path)?,
@@ -32,6 +34,7 @@ impl Sprite {
             curr_frame: Point2::new(0, 0),
             frame_time: Duration::new(0, 0),
             time_per_frame,
+            scale,
         })
     }
 }

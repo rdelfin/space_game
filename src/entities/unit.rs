@@ -25,6 +25,7 @@ impl UnitFactory {
                 "/triangle.png",
                 Point2::new(1, 1),
                 Duration::new(1, 0),
+                Vector2::new(20.0, 20.0),
             )?)
             .build())
     }

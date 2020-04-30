@@ -36,7 +36,10 @@ impl<'a, 'b> System<'b> for RenderSystem<'a> {
             graphics::draw(
                 self.ctx,
                 &sprite.spritesheet,
-                DrawParam::new().src(src).dest(position.0),
+                DrawParam::new()
+                    .src(src)
+                    .dest(position.0)
+                    .scale(sprite.scale),
             )
             .unwrap();
         }
