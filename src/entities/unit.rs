@@ -1,4 +1,4 @@
-use crate::components::{Acceleration, Position, Sprite, Velocity};
+use crate::components::{RigidBody, Sprite};
 
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
@@ -17,9 +17,7 @@ impl UnitFactory {
     ) -> Result<Entity> {
         Ok(world
             .create_entity()
-            .with(Position(start_pos))
-            .with(Velocity(Vector2::new(0.0, 0.0)))
-            .with(Acceleration(Vector2::new(0.0, 0.0)))
+            .with(RigidBody::new(start_pos, 0.0))
             .with(Sprite::new(
                 ctx,
                 "/triangle.png",

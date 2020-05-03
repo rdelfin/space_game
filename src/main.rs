@@ -50,9 +50,7 @@ impl MyGame {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
 
         let mut world = World::new();
-        world.register::<components::Position>();
-        world.register::<components::Velocity>();
-        world.register::<components::Acceleration>();
+        world.register::<components::RigidBody>();
         world.register::<components::UserControlled>();
         world.register::<components::Sprite>();
 
