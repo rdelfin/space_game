@@ -1,7 +1,7 @@
 use crate::components::RigidBody;
 use crate::resources::DeltaTime;
 
-use specs::{Read, ReadStorage, System, WriteStorage};
+use specs::{Read, System, WriteStorage};
 
 pub struct PhysicsEngine;
 
