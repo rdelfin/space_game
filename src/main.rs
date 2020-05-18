@@ -50,9 +50,7 @@ impl MyGame {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
 
         let mut world = World::new();
-        world.register::<components::Position>();
-        world.register::<components::UserControlled>();
-        world.register::<components::Sprite>();
+        components::register_components(&mut world);
 
         entities::UnitFactory::new_triangle(ctx, &mut world, Point2::new(100.0, 100.0))?;
 
