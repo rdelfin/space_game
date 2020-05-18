@@ -1,4 +1,4 @@
-use crate::components::{RigidBody, Sprite};
+use crate::components::{Position, Sprite};
 
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
@@ -17,7 +17,7 @@ impl UnitFactory {
     ) -> Result<Entity> {
         Ok(world
             .create_entity()
-            .with(RigidBody::new(start_pos, 0.0))
+            .with(Position(start_pos))
             .with(Sprite::new(
                 ctx,
                 "/triangle.png",

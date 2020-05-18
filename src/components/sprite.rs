@@ -6,6 +6,11 @@ use specs::prelude::{Component, VecStorage};
 
 use std::time::Duration;
 
+pub struct Position(pub Point2<f32>);
+impl Component for Position {
+    type Storage = VecStorage<Self>;
+}
+
 #[derive(Debug)]
 pub struct Sprite {
     pub spritesheet: Image,

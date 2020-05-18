@@ -50,7 +50,7 @@ impl MyGame {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
 
         let mut world = World::new();
-        world.register::<components::RigidBody>();
+        world.register::<components::Position>();
         world.register::<components::UserControlled>();
         world.register::<components::Sprite>();
 
@@ -85,17 +85,7 @@ impl EventHandler for MyGame {
         self.update_resources(ctx);
 
         let mut dispatcher = DispatcherBuilder::new()
-            .with(systems::ControllerSystem, "controller_system", &[])
-            .with(
-                systems::PhysicsEngine,
-                "physics_engine",
-                &["controller_system"],
-            )
-            .with(
-                systems::SpriteAnimation,
-                "sprite_animation",
-                &["physics_engine", "controller_system"],
-            )
+            .with(systems::SpriteAnimation, "sprite_animation", &[])
             .build();
         dispatcher.dispatch(&mut self.world);
         self.world.maintain();

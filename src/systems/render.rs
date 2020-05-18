@@ -1,4 +1,4 @@
-use crate::components::{RigidBody, Sprite};
+use crate::components::{Position, Sprite};
 
 use ggez::graphics::{self, DrawParam, Rect};
 use ggez::nalgebra::Vector2;
@@ -16,13 +16,13 @@ impl<'a> RenderSystem<'a> {
 }
 
 impl<'a, 'b> System<'b> for RenderSystem<'a> {
-    type SystemData = (ReadStorage<'b, Sprite>, ReadStorage<'b, RigidBody>);
+    type SystemData = (ReadStorage<'b, Sprite>, ReadStorage<'b, Position>);
 
     fn run(&mut self, data: Self::SystemData) {
-        let (sprites, bodies) = data;
+        let (sprites, positions) = data;
 
         use specs::Join;
-        for (sprite, body) in (&sprites, &bodies).join() {
+        for (sprite, position) in (&sprites, &positions).join() {
             let frame_portion = Vector2::new(1.0, 1.0).component_div(&Vector2::new(
                 sprite.sheet_size.x as f32,
                 sprite.sheet_size.y as f32,
@@ -36,7 +36,10 @@ impl<'a, 'b> System<'b> for RenderSystem<'a> {
             graphics::draw(
                 self.ctx,
                 &sprite.spritesheet,
-                DrawParam::new().src(src).dest(body.pos).scale(sprite.scale),
+                DrawParam::new()
+                    .src(src)
+                    .dest(position.0)
+                    .scale(sprite.scale),
             )
             .unwrap();
         }
