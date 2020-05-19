@@ -9,6 +9,7 @@ use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, FilterMode};
 use ggez::nalgebra::Point2;
 use ggez::{Context, ContextBuilder};
+use rand;
 use specs::prelude::{DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
@@ -52,7 +53,15 @@ impl MyGame {
         let mut world = World::new();
         components::register_components(&mut world);
 
-        entities::UnitFactory::new_triangle(ctx, &mut world, Point2::new(100.0, 100.0))?;
+        for x in 0..10 {
+            for y in 0..10 {
+                if rand::random() {
+                    entities::BuildingFactory::new_factory(ctx, &mut world, Point2::new(x, y))?;
+                } else {
+                    entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(x, y))?;
+                }
+            }
+        }
 
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
