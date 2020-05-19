@@ -6,6 +6,7 @@ use specs::prelude::{Component, VecStorage};
 
 use std::time::Duration;
 
+#[derive(Debug)]
 pub struct Position(pub Point2<f32>);
 impl Component for Position {
     type Storage = VecStorage<Self>;
