@@ -41,7 +41,7 @@ impl BuildingFactory {
                 path,
                 Point2::new(1, 1),
                 Duration::new(1, 0),
-                Vector2::new(0.2, 0.2),
+                Vector2::new(0.4, 0.4),
             )?)
             .build())
     }
