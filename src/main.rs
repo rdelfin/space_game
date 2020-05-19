@@ -84,6 +84,7 @@ impl EventHandler for MyGame {
 
         let mut dispatcher = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
+            .with(systems::TilePositionSystem, "tile_position", &[])
             .build();
         dispatcher.dispatch(&mut self.world);
         self.world.maintain();
