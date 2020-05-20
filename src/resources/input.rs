@@ -66,4 +66,28 @@ impl MouseState {
         // Delta is a point for some reason. Turn into a vector2
         self.delta = Point2::from(mouse::delta(ctx)) - Point2::new(0.0, 0.0);
     }
+
+    pub fn position(&self) -> Point2<f32> {
+        self.curr_position
+    }
+
+    pub fn delta(&self) -> Vector2<f32> {
+        self.delta
+    }
+
+    pub fn pressed(&self, button: MouseButton) -> bool {
+        self.currently_pressed.contains(&button)
+    }
+
+    pub fn released(&self, button: MouseButton) -> bool {
+        !self.pressed(button)
+    }
+
+    pub fn just_pressed(&self, button: MouseButton) -> bool {
+        self.pressed(button) && !self.previously_pressed.contains(&button)
+    }
+
+    pub fn just_released(&self, button: MouseButton) -> bool {
+        !self.pressed(button) && self.previously_pressed.contains(&button)
+    }
 }
