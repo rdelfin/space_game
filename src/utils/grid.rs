@@ -15,7 +15,7 @@ pub fn grid_to_position(grid_pos: Point2<i32>) -> Point2<f32> {
 pub fn position_to_grid(pos: Point2<f32>) -> Point2<i32> {
     let system_base = Point2::new(TILE_WIDTH as f32 / 2.0, TILE_HEIGHT as f32 / 2.0);
     let (w, h) = (TILE_WIDTH as f32, TILE_HEIGHT as f32);
-    let coord_matrix = Matrix2::new(1.0 / w, 2.0 / (3.0 * h), 0.0, 4.0 / (3.0 * h));
+    let coord_matrix = Matrix2::new(1.0 / w, -2.0 / (3.0 * h), 0.0, 4.0 / (3.0 * h));
 
     let frac_coord = coord_matrix * (pos - system_base);
     let rounded_coord = cube_to_axial(cube_round(axial_to_cube(Point2::new(
