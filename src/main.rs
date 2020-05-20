@@ -7,6 +7,7 @@ use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, FilterMode};
+use ggez::input::mouse;
 use ggez::nalgebra::Point2;
 use ggez::{Context, ContextBuilder};
 use rand;
@@ -49,6 +50,7 @@ struct MyGame {
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
+        mouse::set_cursor_grabbed(ctx, true);
 
         let mut world = World::new();
         components::register_components(&mut world);
@@ -65,6 +67,7 @@ impl MyGame {
 
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
+        world.insert(resources::MouseState::default());
 
         Ok(MyGame {
             world,
@@ -82,8 +85,12 @@ impl MyGame {
             delta.update(ctx);
         }
 
-        let mut key_state = self.world.write_resource::<resources::KeyboardState>();
+        let (mut key_state, mut mouse_state) = (
+            self.world.write_resource::<resources::KeyboardState>(),
+            self.world.write_resource::<resources::MouseState>(),
+        );
         key_state.update(ctx);
+        mouse_state.update(ctx);
     }
 }
 
