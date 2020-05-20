@@ -25,3 +25,17 @@ impl GridPosition {
         .collect()
     }
 }
+
+#[derive(Debug)]
+pub struct Selectable {
+    pub selected: bool,
+}
+impl Component for Selectable {
+    type Storage = VecStorage<Self>;
+}
+
+impl Selectable {
+    pub fn new() -> Selectable {
+        Selectable { selected: true }
+    }
+}
