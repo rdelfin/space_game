@@ -11,7 +11,6 @@ use ggez::graphics::{self, FilterMode};
 use ggez::input::mouse;
 use ggez::nalgebra::Point2;
 use ggez::{Context, ContextBuilder};
-use rand;
 use specs::prelude::{DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
@@ -56,15 +55,7 @@ impl MyGame {
         let mut world = World::new();
         components::register_components(&mut world);
 
-        for x in 0..10 {
-            for y in 0..10 {
-                if rand::random() {
-                    entities::BuildingFactory::new_factory(ctx, &mut world, Point2::new(x, y))?;
-                } else {
-                    entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(x, y))?;
-                }
-            }
-        }
+        entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(0, 0))?;
 
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
@@ -101,7 +92,8 @@ impl EventHandler for MyGame {
 
         let mut dispatcher = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
-            .with(systems::TilePositionSystem, "tile_position", &[])
+            .with(systems::TileDragSystem, "tile_drag", &[])
+            .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
             .build();
         dispatcher.dispatch(&mut self.world);
         self.world.maintain();
