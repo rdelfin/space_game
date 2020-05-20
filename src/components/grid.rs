@@ -1,6 +1,9 @@
 use ggez::nalgebra::{Point2, Vector2};
 use specs::prelude::{Component, VecStorage};
 
+// Grid position uses an axial coordinate system so we can make full use of the cube coordinate
+// system with only two coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates). You
+// can find a bunch of utility functions for this coordinate system in src/utils/grid.rs
 #[derive(Debug)]
 pub struct GridPosition(pub Point2<i32>);
 impl Component for GridPosition {

@@ -2,6 +2,7 @@ mod components;
 mod entities;
 mod resources;
 mod systems;
+mod utils;
 
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};

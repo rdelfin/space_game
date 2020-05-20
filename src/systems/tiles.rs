@@ -1,10 +1,8 @@
 use crate::components::{GridPosition, Position};
+use crate::utils::grid;
 
-use ggez::nalgebra::Point2;
+use ggez::nalgebra::Vector2;
 use specs::{ReadStorage, System, WriteStorage};
-
-const TILE_WIDTH: i32 = 104;
-const TILE_HEIGHT: i32 = 120;
 
 pub struct TilePositionSystem;
 
@@ -16,16 +14,12 @@ impl<'a> System<'a> for TilePositionSystem {
 
         use specs::Join;
         for (grid_position, position) in (&grid_positions, &mut positions).join() {
-            let x_offset = if grid_position.0.y % 2 == 0 {
-                TILE_WIDTH / 2
-            } else {
-                0
-            };
-
-            position.0 = Point2::new(
-                (grid_position.0.x * TILE_WIDTH + x_offset) as f32,
-                (grid_position.0.y * TILE_HEIGHT * 3 / 4) as f32,
-            );
+            // Subtract half a tile since the coordinate system gives us tile centers
+            position.0 = grid::grid_to_position(grid_position.0)
+                - Vector2::new(
+                    grid::TILE_WIDTH as f32 / 2.0,
+                    grid::TILE_HEIGHT as f32 / 2.0,
+                );
         }
     }
 }
