@@ -50,7 +50,7 @@ struct MyGame {
 impl MyGame {
     pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
-        mouse::set_cursor_grabbed(ctx, true);
+        mouse::set_cursor_grabbed(ctx, true)?;
 
         let mut world = World::new();
         components::register_components(&mut world);
