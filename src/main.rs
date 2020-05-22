@@ -11,7 +11,7 @@ use ggez::graphics::{self, FilterMode};
 use ggez::input::mouse;
 use ggez::nalgebra::Point2;
 use ggez::{Context, ContextBuilder};
-use specs::prelude::{DispatcherBuilder, World, WorldExt};
+use specs::prelude::{Dispatcher, DispatcherBuilder, World, WorldExt};
 use specs::RunNow;
 
 use std::env;
@@ -42,17 +42,24 @@ fn main() {
     }
 }
 
-struct MyGame {
+struct MyGame<'a, 'b> {
     world: World,
+    dispatcher: Dispatcher<'a, 'b>,
     first_frame: bool,
 }
 
-impl MyGame {
-    pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame> {
+impl<'a, 'b> MyGame<'a, 'b> {
+    pub fn new(ctx: &mut Context) -> anyhow::Result<MyGame<'a, 'b>> {
         graphics::set_default_filter(ctx, FilterMode::Nearest);
         mouse::set_cursor_grabbed(ctx, true)?;
 
         let mut world = World::new();
+        let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
+            .with(systems::SpriteAnimation, "sprite_animation", &[])
+            .with(systems::TileDragSystem, "tile_drag", &[])
+            .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
+            .build();
+
         components::register_components(&mut world);
 
         entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(0, 0))?;
@@ -63,6 +70,7 @@ impl MyGame {
 
         Ok(MyGame {
             world,
+            dispatcher,
             first_frame: true,
         })
     }
@@ -86,16 +94,10 @@ impl MyGame {
     }
 }
 
-impl EventHandler for MyGame {
+impl<'a, 'b> EventHandler for MyGame<'a, 'b> {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         self.update_resources(ctx);
-
-        let mut dispatcher = DispatcherBuilder::new()
-            .with(systems::SpriteAnimation, "sprite_animation", &[])
-            .with(systems::TileDragSystem, "tile_drag", &[])
-            .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
-            .build();
-        dispatcher.dispatch(&mut self.world);
+        self.dispatcher.dispatch(&mut self.world);
         self.world.maintain();
         Ok(())
     }
