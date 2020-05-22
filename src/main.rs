@@ -54,19 +54,20 @@ impl<'a, 'b> MyGame<'a, 'b> {
         mouse::set_cursor_grabbed(ctx, true)?;
 
         let mut world = World::new();
-        let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
+        let mut dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
             .with(systems::TileDragSystem, "tile_drag", &[])
             .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
             .build();
 
-        components::register_components(&mut world);
+        dispatcher.setup(&mut world);
 
-        entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(0, 0))?;
-
+        //components::register_components(&mut world);
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
         world.insert(resources::MouseState::default());
+
+        entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(0, 0))?;
 
         Ok(MyGame {
             world,
