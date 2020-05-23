@@ -17,10 +17,11 @@ pub enum ImageCacheError {
 
 impl ImageCache {
     pub fn fetch_image(&mut self, ctx: &mut Context, path: &str) -> Result<&Image> {
-        Ok(self
-            .images
-            .entry(path.to_string())
-            .or_insert(Image::new(ctx, path)?))
+        if !self.images.contains_key(path) {
+            self.images.insert(path.to_string(), Image::new(ctx, path)?);
+        }
+
+        self.get_image_res(path)
     }
 
     pub fn get_image_res(&self, path: &str) -> Result<&Image> {
