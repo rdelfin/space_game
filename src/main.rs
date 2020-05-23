@@ -99,7 +99,6 @@ impl<'a, 'b> EventHandler for MyGame<'a, 'b> {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         self.update_resources(ctx);
         self.dispatcher.dispatch(&mut self.world);
-        self.world.maintain();
         Ok(())
     }
 
@@ -108,8 +107,8 @@ impl<'a, 'b> EventHandler for MyGame<'a, 'b> {
         {
             let mut renderer = systems::RenderSystem::new(ctx);
             renderer.run_now(&self.world);
-            self.world.maintain();
         }
+        self.world.maintain();
         Ok(graphics::present(ctx)?)
     }
 }
