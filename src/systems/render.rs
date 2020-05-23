@@ -1,9 +1,10 @@
 use crate::components::{Position, Sprite};
+use crate::resources::ImageCache;
 
 use ggez::graphics::{self, DrawParam, Rect};
 use ggez::nalgebra::Vector2;
 use ggez::Context;
-use specs::{ReadStorage, System};
+use specs::{ReadStorage, System, Write};
 
 pub struct RenderSystem<'a> {
     ctx: &'a mut Context,
@@ -16,10 +17,14 @@ impl<'a> RenderSystem<'a> {
 }
 
 impl<'a, 'b> System<'b> for RenderSystem<'a> {
-    type SystemData = (ReadStorage<'b, Sprite>, ReadStorage<'b, Position>);
+    type SystemData = (
+        Write<'b, ImageCache>,
+        ReadStorage<'b, Sprite>,
+        ReadStorage<'b, Position>,
+    );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (sprites, positions) = data;
+        let (mut img_cache, sprites, positions) = data;
 
         use specs::Join;
         for (sprite, position) in (&sprites, &positions).join() {
@@ -33,9 +38,11 @@ impl<'a, 'b> System<'b> for RenderSystem<'a> {
                 frame_portion.x,
                 frame_portion.y,
             );
+            let image = img_cache.fetch_image(self.ctx, &sprite.path).unwrap();
+
             graphics::draw(
                 self.ctx,
-                &sprite.spritesheet,
+                image,
                 DrawParam::new()
                     .src(src)
                     .dest(position.0)

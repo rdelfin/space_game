@@ -62,12 +62,12 @@ impl<'a, 'b> MyGame<'a, 'b> {
 
         dispatcher.setup(&mut world);
 
-        //components::register_components(&mut world);
         world.insert(resources::DeltaTime::default());
         world.insert(resources::KeyboardState::default());
         world.insert(resources::MouseState::default());
+        world.insert(resources::ImageCache::default());
 
-        entities::BuildingFactory::new_home(ctx, &mut world, Point2::new(0, 0))?;
+        entities::BuildingFactory::new_home(&mut world, Point2::new(0, 0))?;
 
         Ok(MyGame {
             world,

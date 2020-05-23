@@ -14,7 +14,7 @@ impl Component for Position {
 
 #[derive(Debug)]
 pub struct Sprite {
-    pub spritesheet: Image,
+    pub path: String,
     pub sheet_size: Point2<usize>,
     pub curr_frame: Point2<usize>,
     pub frame_time: Duration,
@@ -28,14 +28,13 @@ impl Component for Sprite {
 
 impl Sprite {
     pub fn new(
-        ctx: &mut Context,
         img_path: &str,
         sheet_size: Point2<usize>,
         time_per_frame: Duration,
         scale: Vector2<f32>,
     ) -> Result<Sprite> {
         Ok(Sprite {
-            spritesheet: Image::new(ctx, img_path)?,
+            path: img_path.to_string(),
             sheet_size,
             curr_frame: Point2::new(0, 0),
             frame_time: Duration::new(0, 0),
