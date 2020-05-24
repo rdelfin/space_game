@@ -1,5 +1,5 @@
 use ggez::nalgebra::{Point2, Vector2};
-use specs::prelude::{Component, VecStorage};
+use specs::prelude::{Component, NullStorage, VecStorage};
 
 // Grid position uses an axial coordinate system so we can make full use of the cube coordinate
 // system with only two coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates). You
@@ -29,16 +29,8 @@ impl GridPosition {
     }
 }
 
-#[derive(Debug)]
-pub struct Selectable {
-    pub selected: bool,
-}
-impl Component for Selectable {
-    type Storage = VecStorage<Self>;
-}
-
-impl Selectable {
-    pub fn new() -> Selectable {
-        Selectable { selected: true }
-    }
+#[derive(Debug, Default)]
+pub struct Selected;
+impl Component for Selected {
+    type Storage = NullStorage<Self>;
 }
