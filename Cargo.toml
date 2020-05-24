@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0.28"
 specs = "0.16.1"
+specs-derive = "0.4.1"
 enum-display-derive = "0.1.0"
 ggez = { git = "https://github.com/rdelfin/ggez" }
 thiserror = "1.0.15"
