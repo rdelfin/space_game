@@ -1,16 +1,15 @@
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
-use specs::prelude::{Component, VecStorage};
+use specs::{Component, VecStorage};
 
 use std::time::Duration;
 
-#[derive(Debug)]
+#[derive(Component, Debug)]
+#[storage(VecStorage)]
 pub struct Position(pub Point2<f32>);
-impl Component for Position {
-    type Storage = VecStorage<Self>;
-}
 
-#[derive(Debug)]
+#[derive(Component, Debug)]
+#[storage(VecStorage)]
 pub struct Sprite {
     pub path: String,
     pub sheet_size: Point2<usize>,
@@ -18,10 +17,6 @@ pub struct Sprite {
     pub frame_time: Duration,
     pub time_per_frame: Duration,
     pub scale: Vector2<f32>,
-}
-
-impl Component for Sprite {
-    type Storage = VecStorage<Self>;
 }
 
 impl Sprite {

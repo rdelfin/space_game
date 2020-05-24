@@ -1,14 +1,12 @@
 use ggez::nalgebra::{Point2, Vector2};
-use specs::prelude::{Component, NullStorage, VecStorage};
+use specs::{Component, NullStorage, VecStorage};
 
 // Grid position uses an axial coordinate system so we can make full use of the cube coordinate
 // system with only two coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates). You
 // can find a bunch of utility functions for this coordinate system in src/utils/grid.rs
-#[derive(Debug)]
+#[derive(Component, Debug)]
+#[storage(VecStorage)]
 pub struct GridPosition(pub Point2<i32>);
-impl Component for GridPosition {
-    type Storage = VecStorage<Self>;
-}
 
 impl GridPosition {
     pub fn adjacent_tiles(&self) -> Vec<Point2<i32>> {
@@ -29,8 +27,6 @@ impl GridPosition {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Component, Debug, Default)]
+#[storage(NullStorage)]
 pub struct Selected;
-impl Component for Selected {
-    type Storage = NullStorage<Self>;
-}

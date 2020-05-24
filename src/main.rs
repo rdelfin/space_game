@@ -4,6 +4,9 @@ mod resources;
 mod systems;
 mod utils;
 
+#[macro_use]
+extern crate specs_derive;
+
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
