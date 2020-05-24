@@ -1,4 +1,4 @@
-use crate::components::{GridPosition, Position, Selected, Sprite};
+use crate::components::{Animated, GridPosition, Position, Selected, Sprite};
 
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
@@ -39,12 +39,7 @@ impl BuildingFactory {
         updater.insert(entity, Selected);
         updater.insert(
             entity,
-            Sprite::new(
-                path,
-                Point2::new(1, 1),
-                Duration::new(1, 0),
-                Vector2::new(0.4, 0.4),
-            )?,
+            Sprite::new(path, Point2::new(1, 1), Vector2::new(0.4, 0.4))?,
         );
         Ok(())
     }
@@ -58,7 +53,6 @@ impl BuildingFactory {
             .with(Sprite::new(
                 path,
                 Point2::new(1, 1),
-                Duration::new(1, 0),
                 Vector2::new(0.4, 0.4),
             )?)
             .build())
