@@ -1,5 +1,3 @@
-use specs::{World, WorldExt};
-
 mod grid;
 mod sprite;
 

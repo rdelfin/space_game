@@ -1,7 +1,5 @@
 use anyhow::Result;
-use ggez::graphics::Image;
 use ggez::nalgebra::{Point2, Vector2};
-use ggez::Context;
 use specs::prelude::{Component, VecStorage};
 
 use std::time::Duration;

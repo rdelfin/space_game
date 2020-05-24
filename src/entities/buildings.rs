@@ -2,7 +2,6 @@ use crate::components::{GridPosition, Position, Selected, Sprite};
 
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
-use ggez::Context;
 use specs::{Builder, Entity, LazyUpdate, World, WorldExt};
 use std::time::Duration;
 
