@@ -7,6 +7,8 @@ mod utils;
 #[macro_use]
 extern crate specs_derive;
 
+use utils::buildings::BuildingType;
+
 use anyhow;
 use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event::{self, EventHandler};
@@ -76,8 +78,16 @@ impl<'a, 'b> MyGame<'a, 'b> {
         world.insert(resources::MouseState::default());
         world.insert(resources::ImageCache::default());
 
-        entities::TileButtonFactory::new_home_button(&mut world, Point2::new(875.0, 1000.0))?;
-        entities::TileButtonFactory::new_factory_button(&mut world, Point2::new(1025.0, 1000.0))?;
+        entities::TileButtonFactory::new_button(
+            &mut world,
+            BuildingType::Home,
+            Point2::new(875.0, 1000.0),
+        )?;
+        entities::TileButtonFactory::new_button(
+            &mut world,
+            BuildingType::Factory,
+            Point2::new(1025.0, 1000.0),
+        )?;
 
         Ok(MyGame {
             world,
