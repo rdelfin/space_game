@@ -28,12 +28,6 @@ impl<'a> System<'a> for TileDragSystem {
 
             if mouse_state.just_released(MouseButton::Left) {
                 updater.remove::<Selected>(entity);
-                let new_building = entities.create();
-                if rand::random() {
-                    BuildingFactory::fill_factory(new_building, &updater, grid_position.0).unwrap();
-                } else {
-                    BuildingFactory::fill_home(new_building, &updater, grid_position.0).unwrap();
-                }
             }
         }
     }

@@ -76,7 +76,6 @@ impl<'a, 'b> MyGame<'a, 'b> {
         world.insert(resources::MouseState::default());
         world.insert(resources::ImageCache::default());
 
-        entities::BuildingFactory::new_home(&mut world, Point2::new(0, 0))?;
         entities::TileButtonFactory::new_home_button(&mut world, Point2::new(875.0, 1000.0))?;
         entities::TileButtonFactory::new_factory_button(&mut world, Point2::new(1025.0, 1000.0))?;
 
