@@ -33,7 +33,7 @@ fn main() {
     let (mut ctx, mut event_loop) = ContextBuilder::new("my_game", "Ricardo Delfin")
         .add_resource_path(resource_dir)
         .window_setup(WindowSetup::default().title("Game Test (rdelfin)"))
-        .window_mode(WindowMode::default().dimensions(2000.0, 2000.0))
+        .window_mode(WindowMode::default().dimensions(2000.0, 1300.0))
         .build()
         .expect("Could not create ggez context");
 
@@ -71,6 +71,8 @@ impl<'a, 'b> MyGame<'a, 'b> {
         world.insert(resources::ImageCache::default());
 
         entities::BuildingFactory::new_home(&mut world, Point2::new(0, 0))?;
+        entities::TileButtonFactory::new_home_button(&mut world, Point2::new(875.0, 1000.0))?;
+        entities::TileButtonFactory::new_factory_button(&mut world, Point2::new(1025.0, 1000.0))?;
 
         Ok(MyGame {
             world,
