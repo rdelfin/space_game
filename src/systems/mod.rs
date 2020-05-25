@@ -5,5 +5,5 @@ mod tiles;
 
 pub use self::animation::SpriteAnimation;
 pub use self::render::RenderSystem;
-pub use self::tile_placement::TileDragSystem;
+pub use self::tile_placement::{ButtonPressSystem, ButtonSpriteSystem, TileDragSystem};
 pub use self::tiles::TilePositionSystem;

@@ -1,6 +1,7 @@
 use crate::components::{Position, Pressable, Sprite};
 
 use anyhow::Result;
+use ggez::graphics::Rect;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Builder, Entity, World, WorldExt};
 use std::time::Duration;
@@ -25,7 +26,9 @@ impl TileButtonFactory {
                 Point2::new(2, 1),
                 Vector2::new(1.0, 1.0),
             )?)
-            //.with(Pressable)
+            .with(Pressable::new(Rect::new(
+                position.x, position.y, 100.0, 100.0,
+            )))
             .build())
     }
 }

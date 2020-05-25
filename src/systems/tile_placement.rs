@@ -1,9 +1,10 @@
-use crate::components::{GridPosition, Selected};
+use crate::components::{GridPosition, Pressable, Pressed, Selected, Sprite};
 use crate::entities::BuildingFactory;
 use crate::resources::MouseState;
 use crate::utils::grid;
 
 use ggez::input::mouse::MouseButton;
+use ggez::nalgebra::Point2;
 use rand;
 use specs::{Entities, LazyUpdate, Read, ReadStorage, System, WriteStorage};
 
@@ -34,6 +35,68 @@ impl<'a> System<'a> for TileDragSystem {
                     BuildingFactory::fill_home(new_building, &updater, grid_position.0).unwrap();
                 }
             }
+        }
+    }
+}
+
+pub struct ButtonPressSystem;
+
+impl<'a> System<'a> for ButtonPressSystem {
+    type SystemData = (
+        Entities<'a>,
+        Read<'a, LazyUpdate>,
+        Read<'a, MouseState>,
+        ReadStorage<'a, Pressable>,
+        ReadStorage<'a, Pressed>,
+        WriteStorage<'a, Sprite>,
+    );
+
+    fn run(&mut self, data: Self::SystemData) {
+        let (entities, updater, mouse_state, pressables, pressed_ones, mut sprites) = data;
+
+        if mouse_state.just_pressed(MouseButton::Left) {
+            use specs::Join;
+            for (entity, pressable, (), sprite) in
+                (&entities, &pressables, !&pressed_ones, &mut sprites).join()
+            {
+                if pressable.click_box.contains(mouse_state.position()) {
+                    updater.insert(entity, Pressed);
+                }
+            }
+        }
+
+        if mouse_state.just_released(MouseButton::Left) {
+            use specs::Join;
+            for (entity, pressable, _, sprite) in
+                (&entities, &pressables, &pressed_ones, &mut sprites).join()
+            {
+                updater.remove::<Pressed>(entity);
+            }
+        }
+    }
+}
+
+pub struct ButtonSpriteSystem;
+
+impl<'a> System<'a> for ButtonSpriteSystem {
+    type SystemData = (
+        ReadStorage<'a, Pressable>,
+        ReadStorage<'a, Pressed>,
+        WriteStorage<'a, Sprite>,
+    );
+
+    fn run(&mut self, data: Self::SystemData) {
+        let (pressables, pressed_ones, mut sprites) = data;
+
+        use specs::Join;
+        for (_, pressed, sprite) in (&pressables, (&pressed_ones).maybe(), &mut sprites).join() {
+            sprite.curr_frame = Point2::new(
+                match pressed {
+                    Some(_) => 1,
+                    None => 0,
+                },
+                0,
+            );
         }
     }
 }

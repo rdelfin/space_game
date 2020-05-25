@@ -61,6 +61,12 @@ impl<'a, 'b> MyGame<'a, 'b> {
             .with(systems::SpriteAnimation, "sprite_animation", &[])
             .with(systems::TileDragSystem, "tile_drag", &[])
             .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
+            .with(systems::ButtonPressSystem, "button_press", &[])
+            .with(
+                systems::ButtonSpriteSystem,
+                "button_sprite",
+                &["button_press"],
+            )
             .build();
 
         dispatcher.setup(&mut world);
