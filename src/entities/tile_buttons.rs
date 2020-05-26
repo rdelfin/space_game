@@ -5,7 +5,6 @@ use anyhow::Result;
 use ggez::graphics::Rect;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Builder, Entity, World, WorldExt};
-use std::time::Duration;
 
 pub struct TileButtonFactory;
 

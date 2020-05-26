@@ -9,6 +9,7 @@ use specs::{Component, NullStorage, VecStorage};
 pub struct GridPosition(pub Point2<i32>);
 
 impl GridPosition {
+    #[allow(dead_code)]
     pub fn adjacent_tiles(&self) -> Vec<Point2<i32>> {
         let left_offset = if self.0.y % 2 == 0 { 0 } else { -1 };
         let right_offset = if self.0.y % 2 == 0 { 1 } else { 0 };

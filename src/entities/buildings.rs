@@ -1,14 +1,14 @@
-use crate::components::{Animated, GridPosition, Position, Selected, Sprite};
+use crate::components::{GridPosition, Position, Selected, Sprite};
 use crate::utils::buildings::{self, BuildingType};
 
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Builder, Entity, LazyUpdate, World, WorldExt};
-use std::time::Duration;
 
 pub struct BuildingFactory;
 
 impl BuildingFactory {
+    #[allow(dead_code)]
     pub fn new_tile(
         world: &mut World,
         building_type: BuildingType,

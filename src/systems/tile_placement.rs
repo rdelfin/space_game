@@ -7,7 +7,6 @@ use crate::utils::grid;
 
 use ggez::input::mouse::MouseButton;
 use ggez::nalgebra::Point2;
-use rand;
 use specs::{Entities, LazyUpdate, Read, ReadStorage, System, WriteStorage};
 
 pub struct TileDragSystem;
@@ -44,17 +43,14 @@ impl<'a> System<'a> for ButtonPressSystem {
         Read<'a, MouseState>,
         ReadStorage<'a, Pressable>,
         ReadStorage<'a, Pressed>,
-        WriteStorage<'a, Sprite>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, updater, mouse_state, pressables, pressed_ones, mut sprites) = data;
+        let (entities, updater, mouse_state, pressables, pressed_ones) = data;
 
         if mouse_state.just_pressed(MouseButton::Left) {
             use specs::Join;
-            for (entity, pressable, (), sprite) in
-                (&entities, &pressables, !&pressed_ones, &mut sprites).join()
-            {
+            for (entity, pressable, ()) in (&entities, &pressables, !&pressed_ones).join() {
                 if pressable.click_box.contains(mouse_state.position()) {
                     updater.insert(entity, Pressed);
                 }
@@ -63,9 +59,7 @@ impl<'a> System<'a> for ButtonPressSystem {
 
         if mouse_state.just_released(MouseButton::Left) {
             use specs::Join;
-            for (entity, pressable, _, sprite) in
-                (&entities, &pressables, &pressed_ones, &mut sprites).join()
-            {
+            for (entity, _, _) in (&entities, &pressables, &pressed_ones).join() {
                 updater.remove::<Pressed>(entity);
                 updater.insert(entity, ButtonActionable);
             }
@@ -111,11 +105,6 @@ impl<'a> System<'a> for TileButtonActionSystem {
     fn run(&mut self, data: Self::SystemData) {
         use specs::Join;
         let (entities, updater, actionables, button_buildings) = data;
-
-        println!(
-            "Number of button buildings: {}",
-            (&button_buildings).join().collect::<Vec<_>>().len()
-        );
 
         for (entity, _, button_building) in (&entities, &actionables, &button_buildings).join() {
             // Mark the action as already acted on for the button

@@ -71,6 +71,7 @@ impl MouseState {
         self.curr_position
     }
 
+    #[allow(dead_code)]
     pub fn delta(&self) -> Vector2<f32> {
         self.delta
     }
@@ -79,6 +80,7 @@ impl MouseState {
         self.currently_pressed.contains(&button)
     }
 
+    #[allow(dead_code)]
     pub fn released(&self, button: MouseButton) -> bool {
         !self.pressed(button)
     }

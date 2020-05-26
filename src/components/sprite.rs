@@ -18,6 +18,7 @@ pub struct Sprite {
 }
 
 impl Sprite {
+    #[allow(dead_code)]
     pub fn new(img_path: &str, sheet_size: Point2<usize>, scale: Vector2<f32>) -> Result<Sprite> {
         Ok(Sprite {
             path: img_path.to_string(),
@@ -36,6 +37,7 @@ pub struct Animated {
 }
 
 impl Animated {
+    #[allow(dead_code)]
     pub fn new(time_per_frame: Duration) -> Animated {
         Animated {
             frame_time: Duration::new(0, 0),
