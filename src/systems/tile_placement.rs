@@ -1,4 +1,6 @@
-use crate::components::{GridPosition, Pressable, Pressed, Selected, Sprite};
+use crate::components::{
+    ButtonActionable, ButtonBuilding, GridPosition, Pressable, Pressed, Selected, Sprite,
+};
 use crate::entities::BuildingFactory;
 use crate::resources::MouseState;
 use crate::utils::grid;
@@ -65,6 +67,7 @@ impl<'a> System<'a> for ButtonPressSystem {
                 (&entities, &pressables, &pressed_ones, &mut sprites).join()
             {
                 updater.remove::<Pressed>(entity);
+                updater.insert(entity, ButtonActionable);
             }
         }
     }
@@ -91,6 +94,42 @@ impl<'a> System<'a> for ButtonSpriteSystem {
                 },
                 0,
             );
+        }
+    }
+}
+
+pub struct TileButtonActionSystem;
+
+impl<'a> System<'a> for TileButtonActionSystem {
+    type SystemData = (
+        Entities<'a>,
+        Read<'a, LazyUpdate>,
+        ReadStorage<'a, ButtonActionable>,
+        ReadStorage<'a, ButtonBuilding>,
+    );
+
+    fn run(&mut self, data: Self::SystemData) {
+        use specs::Join;
+        let (entities, updater, actionables, button_buildings) = data;
+
+        println!(
+            "Number of button buildings: {}",
+            (&button_buildings).join().collect::<Vec<_>>().len()
+        );
+
+        for (entity, _, button_building) in (&entities, &actionables, &button_buildings).join() {
+            // Mark the action as already acted on for the button
+            updater.remove::<ButtonActionable>(entity);
+
+            // Create a new tile
+            let tile = entities.create();
+            BuildingFactory::fill_tile(
+                tile,
+                &updater,
+                button_building.building_type,
+                Point2::new(0, 0),
+            )
+            .unwrap();
         }
     }
 }
