@@ -1,4 +1,4 @@
-use crate::components::{Position, Pressable, Sprite};
+use crate::components::{ButtonBuilding, Position, Pressable, Sprite};
 use crate::utils::buildings::{self, BuildingType};
 
 use anyhow::Result;
@@ -23,6 +23,7 @@ impl TileButtonFactory {
                 Point2::new(2, 1),
                 Vector2::new(1.0, 1.0),
             )?)
+            .with(ButtonBuilding::new(building_type))
             .with(Pressable::new(Rect::new(
                 position.x, position.y, 100.0, 100.0,
             )))

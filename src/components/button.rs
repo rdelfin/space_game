@@ -27,3 +27,8 @@ pub struct ButtonActionable;
 pub struct ButtonBuilding {
     pub building_type: BuildingType,
 }
+impl ButtonBuilding {
+    pub fn new(building_type: BuildingType) -> ButtonBuilding {
+        ButtonBuilding { building_type }
+    }
+}
