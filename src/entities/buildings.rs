@@ -27,7 +27,7 @@ impl BuildingFactory {
             .build())
     }
 
-    fn fill_tile(
+    pub fn fill_tile(
         entity: Entity,
         updater: &LazyUpdate,
         building_type: BuildingType,
