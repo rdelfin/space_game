@@ -1,3 +1,5 @@
+use crate::utils::buildings::BuildingType;
+
 use ggez::graphics::Rect;
 use specs::prelude::{Component, NullStorage, VecStorage};
 
@@ -15,3 +17,13 @@ impl Pressable {
 #[derive(Default, Component, Debug)]
 #[storage(NullStorage)]
 pub struct Pressed;
+
+#[derive(Default, Component, Debug)]
+#[storage(NullStorage)]
+pub struct ButtonActionable;
+
+#[derive(Component, Debug)]
+#[storage(VecStorage)]
+pub struct ButtonBuilding {
+    pub building_type: BuildingType,
+}
