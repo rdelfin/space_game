@@ -35,7 +35,7 @@ fn main() {
     let (mut ctx, mut event_loop) = ContextBuilder::new("my_game", "Ricardo Delfin")
         .add_resource_path(resource_dir)
         .window_setup(WindowSetup::default().title("Game Test (rdelfin)"))
-        .window_mode(WindowMode::default().dimensions(2000.0, 1300.0))
+        .window_mode(WindowMode::default().dimensions(1800.0, 1000.0))
         .build()
         .expect("Could not create ggez context");
 
@@ -90,12 +90,12 @@ impl<'a, 'b> MyGame<'a, 'b> {
         entities::TileButtonFactory::new_button(
             &mut world,
             BuildingType::Home,
-            Point2::new(875.0, 1000.0),
+            Point2::new(775.0, 800.0),
         )?;
         entities::TileButtonFactory::new_button(
             &mut world,
             BuildingType::Factory,
-            Point2::new(1025.0, 1000.0),
+            Point2::new(925.0, 800.0),
         )?;
 
         Ok(MyGame {
