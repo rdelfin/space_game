@@ -90,12 +90,17 @@ impl<'a, 'b> MyGame<'a, 'b> {
         entities::TileButtonFactory::new_button(
             &mut world,
             BuildingType::Home,
-            Point2::new(775.0, 800.0),
+            Point2::new(700.0, 800.0),
         )?;
         entities::TileButtonFactory::new_button(
             &mut world,
             BuildingType::Factory,
-            Point2::new(925.0, 800.0),
+            Point2::new(850.0, 800.0),
+        )?;
+        entities::TileButtonFactory::new_button(
+            &mut world,
+            BuildingType::Airlock,
+            Point2::new(1000.0, 800.0),
         )?;
 
         Ok(MyGame {
