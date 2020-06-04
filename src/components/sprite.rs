@@ -1,4 +1,3 @@
-use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Component, VecStorage};
 
@@ -19,13 +18,13 @@ pub struct Sprite {
 
 impl Sprite {
     #[allow(dead_code)]
-    pub fn new(img_path: &str, sheet_size: Point2<usize>, scale: Vector2<f32>) -> Result<Sprite> {
-        Ok(Sprite {
+    pub fn new(img_path: &str, sheet_size: Point2<usize>, scale: Vector2<f32>) -> Sprite {
+        Sprite {
             path: img_path.to_string(),
             sheet_size,
             curr_frame: Point2::new(0, 0),
             scale,
-        })
+        }
     }
 }
 

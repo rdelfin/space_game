@@ -117,8 +117,7 @@ impl<'a> System<'a> for TileButtonActionSystem {
                 &updater,
                 button_building.building_type,
                 Point2::new(0, 0),
-            )
-            .unwrap();
+            );
         }
     }
 }
