@@ -30,4 +30,4 @@ impl GridPosition {
 
 #[derive(Component, Debug, Default)]
 #[storage(NullStorage)]
-pub struct Selected;
+pub struct Placing;

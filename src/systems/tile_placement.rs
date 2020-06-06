@@ -1,5 +1,5 @@
 use crate::components::{
-    ButtonActionable, ButtonBuilding, GridPosition, Pressable, Pressed, Selected, Sprite,
+    ButtonActionable, ButtonBuilding, GridPosition, Placing, Pressable, Pressed, Sprite,
 };
 use crate::entities::BuildingFactory;
 use crate::resources::MouseState;
@@ -16,19 +16,19 @@ impl<'a> System<'a> for TileDragSystem {
         Entities<'a>,
         Read<'a, LazyUpdate>,
         Read<'a, MouseState>,
-        ReadStorage<'a, Selected>,
+        ReadStorage<'a, Placing>,
         WriteStorage<'a, GridPosition>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, updater, mouse_state, selected, mut grid_positions) = data;
+        let (entities, updater, mouse_state, placing, mut grid_positions) = data;
 
         use specs::Join;
-        for (entity, _, grid_position) in (&entities, &selected, &mut grid_positions).join() {
+        for (entity, _, grid_position) in (&entities, &placing, &mut grid_positions).join() {
             grid_position.0 = grid::position_to_grid(mouse_state.position());
 
             if mouse_state.just_released(MouseButton::Left) {
-                updater.remove::<Selected>(entity);
+                updater.remove::<Placing>(entity);
             }
         }
     }
