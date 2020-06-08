@@ -77,7 +77,12 @@ impl<'a, 'b> MyGame<'a, 'b> {
                 "tile_drag",
                 &["tile_button_action"],
             )
-            .with(systems::TilePositionSystem, "tile_position", &["tile_drag"])
+            .with(systems::PathMovementSystem, "path_movement", &[])
+            .with(
+                systems::TilePositionSystem,
+                "tile_position",
+                &["tile_drag", "path_movement"],
+            )
             .build();
 
         dispatcher.setup(&mut world);
