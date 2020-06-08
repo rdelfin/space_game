@@ -102,7 +102,7 @@ impl<'a, 'b> MyGame<'a, 'b> {
             BuildingType::Airlock,
             Point2::new(1000.0, 800.0),
         );
-        entities::PeopleFactory::new_person(&mut world, Point2::new(5, 5));
+        entities::PeopleFactory::new_person(&mut world, Point2::new(5, 5), Point2::new(7, 3));
 
         Ok(MyGame {
             world,
