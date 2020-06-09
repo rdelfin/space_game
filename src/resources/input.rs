@@ -35,11 +35,17 @@ impl KeyboardState {
     }
 }
 
+pub enum MouseMode {
+    Free,
+    PlacingBuildings,
+}
+
 pub struct MouseState {
     currently_pressed: HashSet<MouseButton>,
     previously_pressed: HashSet<MouseButton>,
     curr_position: Point2<f32>,
     delta: Vector2<f32>,
+    pub mode: MouseMode,
 }
 
 impl Default for MouseState {
@@ -49,6 +55,7 @@ impl Default for MouseState {
             previously_pressed: HashSet::new(),
             curr_position: Point2::new(0.0, 0.0),
             delta: Vector2::new(0.0, 0.0),
+            mode: MouseMode::Free,
         }
     }
 }

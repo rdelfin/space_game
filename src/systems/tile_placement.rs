@@ -2,12 +2,12 @@ use crate::components::{
     ButtonActionable, ButtonBuilding, GridPosition, Placing, Pressable, Pressed, Sprite,
 };
 use crate::entities::BuildingFactory;
-use crate::resources::MouseState;
+use crate::resources::{MouseMode, MouseState};
 use crate::utils::grid;
 
 use ggez::input::mouse::MouseButton;
 use ggez::nalgebra::Point2;
-use specs::{Entities, LazyUpdate, Read, ReadStorage, System, WriteStorage};
+use specs::{Entities, LazyUpdate, Read, ReadStorage, System, Write, WriteStorage};
 
 pub struct TileDragSystem;
 
@@ -15,20 +15,23 @@ impl<'a> System<'a> for TileDragSystem {
     type SystemData = (
         Entities<'a>,
         Read<'a, LazyUpdate>,
-        Read<'a, MouseState>,
+        Write<'a, MouseState>,
         ReadStorage<'a, Placing>,
         WriteStorage<'a, GridPosition>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, updater, mouse_state, placing, mut grid_positions) = data;
+        let (entities, updater, mut mouse_state, placing, mut grid_positions) = data;
 
         use specs::Join;
         for (entity, _, grid_position) in (&entities, &placing, &mut grid_positions).join() {
             grid_position.0 = grid::position_to_grid(mouse_state.position());
 
-            if mouse_state.just_released(MouseButton::Left) {
-                updater.remove::<Placing>(entity);
+            if let MouseMode::PlacingBuildings = mouse_state.mode {
+                if mouse_state.just_released(MouseButton::Left) {
+                    mouse_state.mode = MouseMode::Free;
+                    updater.remove::<Placing>(entity);
+                }
             }
         }
     }
@@ -47,7 +50,6 @@ impl<'a> System<'a> for ButtonPressSystem {
 
     fn run(&mut self, data: Self::SystemData) {
         let (entities, updater, mouse_state, pressables, pressed_ones) = data;
-
         if mouse_state.just_pressed(MouseButton::Left) {
             use specs::Join;
             for (entity, pressable, ()) in (&entities, &pressables, !&pressed_ones).join() {
@@ -97,6 +99,7 @@ pub struct TileButtonActionSystem;
 impl<'a> System<'a> for TileButtonActionSystem {
     type SystemData = (
         Entities<'a>,
+        Write<'a, MouseState>,
         Read<'a, LazyUpdate>,
         ReadStorage<'a, ButtonActionable>,
         ReadStorage<'a, ButtonBuilding>,
@@ -104,20 +107,23 @@ impl<'a> System<'a> for TileButtonActionSystem {
 
     fn run(&mut self, data: Self::SystemData) {
         use specs::Join;
-        let (entities, updater, actionables, button_buildings) = data;
+        let (entities, mut mouse_state, updater, actionables, button_buildings) = data;
 
         for (entity, _, button_building) in (&entities, &actionables, &button_buildings).join() {
             // Mark the action as already acted on for the button
             updater.remove::<ButtonActionable>(entity);
 
-            // Create a new tile
-            let tile = entities.create();
-            BuildingFactory::fill_tile(
-                tile,
-                &updater,
-                button_building.building_type,
-                Point2::new(0, 0),
-            );
+            if let MouseMode::Free = mouse_state.mode {
+                mouse_state.mode = MouseMode::PlacingBuildings;
+                // Create a new tile
+                let tile = entities.create();
+                BuildingFactory::fill_tile(
+                    tile,
+                    &updater,
+                    button_building.building_type,
+                    Point2::new(0, 0),
+                );
+            }
         }
     }
 }
