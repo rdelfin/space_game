@@ -1,5 +1,9 @@
+use crate::utils::grid;
+
+use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Component, NullStorage, VecStorage};
+use std::collections::HashSet;
 
 // Grid position uses an axial coordinate system so we can make full use of the cube coordinate
 // system with only two coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates). You
@@ -31,3 +35,30 @@ impl GridPosition {
 #[derive(Component, Debug, Default)]
 #[storage(NullStorage)]
 pub struct Placing;
+
+pub struct HexBorders {
+    // These walls are defined from the right and going around counter-clockwise. The hex grid has
+    // the flat ends to the left and right, and points upwards.
+    walls: [bool; 6],
+}
+
+impl HexBorders {
+    pub fn new(tr: bool, r: bool, br: bool, bl: bool, l: bool, tl: bool) -> HexBorders {
+        HexBorders {
+            walls: [tr, r, br, bl, l, tl],
+        }
+    }
+
+    pub fn is_accessible(&self, a: Point2<i32>, b: Point2<i32>) -> bool {
+        let neighbours = grid::neighbours(a);
+
+        let neighbour_set: HashSet<Point2<i32>> = neighbours
+            .iter()
+            .zip(self.walls.iter())
+            .filter(|v| *v.1)
+            .map(|v| *v.0)
+            .collect();
+
+        neighbour_set.contains(&b)
+    }
+}

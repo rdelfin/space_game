@@ -52,3 +52,16 @@ pub fn cube_round(pos: Point3<f32>) -> Point3<f32> {
 
     Point3::new(rx, ry, rz)
 }
+
+// The ordering might be important here for a given use, so they're provided starting on the right
+// going around clockwise.
+pub fn neighbours(pos: Point2<i32>) -> [Point2<i32>; 6] {
+    [
+        pos + Vector2::new(1, 0),
+        pos + Vector2::new(1, -1),
+        pos + Vector2::new(0, -1),
+        pos + Vector2::new(-1, 0),
+        pos + Vector2::new(-1, 1),
+        pos + Vector2::new(0, 1),
+    ]
+}
