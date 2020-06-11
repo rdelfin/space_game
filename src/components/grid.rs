@@ -3,6 +3,7 @@ use crate::utils::grid;
 use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Component, NullStorage, VecStorage};
+use std::cmp::Ordering;
 use std::collections::HashSet;
 
 // Grid position uses an axial coordinate system so we can make full use of the cube coordinate
@@ -36,29 +37,26 @@ impl GridPosition {
 #[storage(NullStorage)]
 pub struct Placing;
 
-pub struct HexBorders {
-    // These walls are defined from the right and going around counter-clockwise. The hex grid has
-    // the flat ends to the left and right, and points upwards.
-    walls: [bool; 6],
+pub struct Wall {
+    s: Point2<i32>,
+    e: Point2<i32>,
 }
 
-impl HexBorders {
-    pub fn new(tr: bool, r: bool, br: bool, bl: bool, l: bool, tl: bool) -> HexBorders {
-        HexBorders {
-            walls: [tr, r, br, bl, l, tl],
+impl Wall {
+    pub fn new(start: Point2<i32>, end: Point2<i32>) -> Wall {
+        match Wall::pos_ordering(start, end) {
+            Ordering::Greater => Wall { s: start, e: end },
+            _ => Wall { s: end, e: start },
         }
     }
 
-    pub fn is_accessible(&self, a: Point2<i32>, b: Point2<i32>) -> bool {
-        let neighbours = grid::neighbours(a);
-
-        let neighbour_set: HashSet<Point2<i32>> = neighbours
-            .iter()
-            .zip(self.walls.iter())
-            .filter(|v| *v.1)
-            .map(|v| *v.0)
-            .collect();
-
-        neighbour_set.contains(&b)
+    fn pos_ordering(a: Point2<i32>, b: Point2<i32>) -> Ordering {
+        if a == b {
+            Ordering::Equal
+        } else if a.x > b.x || a.y > b.y {
+            Ordering::Greater
+        } else {
+            Ordering::Less
+        }
     }
 }
