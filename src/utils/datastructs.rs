@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 pub struct RevRange {
     curr: i32,
     end: i32,
@@ -13,14 +15,16 @@ impl Iterator for RevRange {
     type Item = i32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.curr == self.end {
-            None
-        } else if self.curr > self.end {
-            self.curr -= 1;
-            Some(self.curr)
-        } else {
-            self.curr += 1;
-            Some(self.curr)
+        match self.curr.cmp(&self.end) {
+            Ordering::Equal => None,
+            Ordering::Greater => {
+                self.curr -= 1;
+                Some(self.curr)
+            }
+            Ordering::Less => {
+                self.curr += 1;
+                Some(self.curr)
+            }
         }
     }
 }

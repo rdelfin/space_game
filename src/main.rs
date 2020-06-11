@@ -138,7 +138,7 @@ impl<'a, 'b> MyGame<'a, 'b> {
 impl<'a, 'b> EventHandler for MyGame<'a, 'b> {
     fn update(&mut self, ctx: &mut Context) -> anyhow::Result<()> {
         self.update_resources(ctx);
-        self.dispatcher.dispatch(&mut self.world);
+        self.dispatcher.dispatch(&self.world);
         Ok(())
     }
 

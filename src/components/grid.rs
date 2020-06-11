@@ -1,10 +1,6 @@
-use crate::utils::grid;
-
-use anyhow::Result;
 use ggez::nalgebra::{Point2, Vector2};
 use specs::{Component, NullStorage, VecStorage};
 use std::cmp::Ordering;
-use std::collections::HashSet;
 
 // Grid position uses an axial coordinate system so we can make full use of the cube coordinate
 // system with only two coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates). You

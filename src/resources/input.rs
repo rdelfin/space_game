@@ -64,9 +64,9 @@ impl MouseState {
     pub fn update(&mut self, ctx: &mut Context) {
         self.previously_pressed = self.currently_pressed.clone();
         self.currently_pressed = HashSet::new();
-        for button in vec![MouseButton::Left, MouseButton::Middle, MouseButton::Right] {
-            if mouse::button_pressed(ctx, button) {
-                self.currently_pressed.insert(button);
+        for button in &[MouseButton::Left, MouseButton::Middle, MouseButton::Right] {
+            if mouse::button_pressed(ctx, *button) {
+                self.currently_pressed.insert(*button);
             }
         }
         self.curr_position = Point2::from(mouse::position(ctx));

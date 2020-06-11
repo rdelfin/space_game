@@ -65,12 +65,12 @@ pub enum WallDirection {
 
 pub fn wall_direction_to_offset(dir: WallDirection) -> Vector2<i32> {
     match dir {
-        Right => Vector2::new(1, 0),
-        TopRight => Vector2::new(1, 1),
-        TopLeft => Vector2::new(0, -1),
-        Left => Vector2::new(-1, 0),
-        BottomLeft => Vector2::new(-1, 1),
-        BottomRight => Vector2::new(0, 1),
+        WallDirection::Right => Vector2::new(1, 0),
+        WallDirection::TopRight => Vector2::new(1, 1),
+        WallDirection::TopLeft => Vector2::new(0, -1),
+        WallDirection::Left => Vector2::new(-1, 0),
+        WallDirection::BottomLeft => Vector2::new(-1, 1),
+        WallDirection::BottomRight => Vector2::new(0, 1),
     }
 }
 
