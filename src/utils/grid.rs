@@ -53,6 +53,27 @@ pub fn cube_round(pos: Point3<f32>) -> Point3<f32> {
     Point3::new(rx, ry, rz)
 }
 
+#[derive(Debug, Clone)]
+pub enum WallDirection {
+    Right,
+    TopRight,
+    TopLeft,
+    Left,
+    BottomLeft,
+    BottomRight,
+}
+
+pub fn wall_direction_to_offset(dir: WallDirection) -> Vector2<i32> {
+    match dir {
+        Right => Vector2::new(1, 0),
+        TopRight => Vector2::new(1, 1),
+        TopLeft => Vector2::new(0, -1),
+        Left => Vector2::new(-1, 0),
+        BottomLeft => Vector2::new(-1, 1),
+        BottomRight => Vector2::new(0, 1),
+    }
+}
+
 // The ordering might be important here for a given use, so they're provided starting on the right
 // going around clockwise.
 pub fn neighbours(pos: Point2<i32>) -> [Point2<i32>; 6] {
