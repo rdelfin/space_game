@@ -33,6 +33,8 @@ impl GridPosition {
 #[storage(NullStorage)]
 pub struct Placing;
 
+#[derive(PartialEq, Eq, Hash, Component, Debug)]
+#[storage(VecStorage)]
 pub struct Wall {
     s: Point2<i32>,
     e: Point2<i32>,
@@ -43,6 +45,20 @@ impl Wall {
         match Wall::pos_ordering(start, end) {
             Ordering::Greater => Wall { s: start, e: end },
             _ => Wall { s: end, e: start },
+        }
+    }
+
+    pub fn contains(&self, p: Point2<i32>) -> bool {
+        self.s == p || self.e == p
+    }
+
+    pub fn other(&self, p: Point2<i32>) -> Option<Point2<i32>> {
+        if self.s == p {
+            Some(self.e)
+        } else if self.e == p {
+            Some(self.s)
+        } else {
+            None
         }
     }
 

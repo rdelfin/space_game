@@ -1,4 +1,4 @@
-use crate::components::{GridPosition, Placing, Position, Sprite};
+use crate::components::{GridPosition, Placing, Position, Sprite, Wall};
 use crate::utils::buildings::{self, BuildingType};
 
 use ggez::nalgebra::{Point2, Vector2};
@@ -43,5 +43,9 @@ impl BuildingFactory {
                 Vector2::new(0.4, 0.4),
             ),
         );
+    }
+
+    pub fn fill_wall(entity: Entity, updater: &LazyUpdate, start: Point2<i32>, end: Point2<i32>) {
+        updater.insert(entity, Wall::new(start, end));
     }
 }
