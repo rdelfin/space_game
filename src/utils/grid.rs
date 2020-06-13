@@ -86,3 +86,19 @@ pub fn neighbours(pos: Point2<i32>) -> [Point2<i32>; 6] {
         pos + Vector2::new(0, 1),
     ]
 }
+
+// Distance function for any two given points on a hex grid.
+pub fn distance(a: Point2<i32>, b: Point2<i32>) -> i32 {
+    let (a_cube, b_cube) = (
+        axial_to_cube(Point2::new(a.x as f32, a.y as f32)),
+        axial_to_cube(Point2::new(b.x as f32, b.y as f32)),
+    );
+    *([
+        (a_cube.x - b_cube.x).abs() as i32,
+        (a_cube.y - b_cube.y).abs() as i32,
+        (a_cube.z - b_cube.z).abs() as i32,
+    ]
+    .iter()
+    .max()
+    .unwrap())
+}
