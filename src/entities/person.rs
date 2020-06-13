@@ -20,7 +20,7 @@ impl PeopleFactory {
             ))
             .with(PathFinder::new(
                 goal,
-                PathFindingAlgorithm::Manhattan,
+                PathFindingAlgorithm::BreathFirst,
                 Duration::from_secs(1),
             ))
             .build()
