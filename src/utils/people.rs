@@ -1,8 +1,9 @@
+use crate::components::Wall;
 use crate::utils::datastructs::RevRange;
 use crate::utils::grid;
 
 use ggez::nalgebra::Point2;
-use std::collections::{HashMap, VecDeque};
+use std::collections::{HashMap, HashSet, VecDeque};
 
 #[derive(Debug, Copy, Clone)]
 pub enum PathFindingAlgorithm {
@@ -13,11 +14,12 @@ pub enum PathFindingAlgorithm {
 pub fn get_path(
     start: Point2<i32>,
     end: Point2<i32>,
+    walls: &HashSet<&Wall>,
     algo: PathFindingAlgorithm,
 ) -> Vec<Point2<i32>> {
     match algo {
         PathFindingAlgorithm::Manhattan => manhattan(start, end),
-        PathFindingAlgorithm::BreathFirst => breath_first(start, end),
+        PathFindingAlgorithm::BreathFirst => breath_first(start, end, walls),
     }
 }
 
@@ -47,7 +49,7 @@ fn manhattan(start: Point2<i32>, end: Point2<i32>) -> Vec<Point2<i32>> {
 }
 
 // A basic, breath-first search algorithm.
-fn breath_first(start: Point2<i32>, end: Point2<i32>) -> Vec<Point2<i32>> {
+fn breath_first(start: Point2<i32>, end: Point2<i32>, walls: &HashSet<&Wall>) -> Vec<Point2<i32>> {
     let mut frontier: VecDeque<Point2<i32>> = VecDeque::new();
     frontier.push_back(start);
     let mut came_from: HashMap<Point2<i32>, Point2<i32>> = HashMap::new();
@@ -61,7 +63,7 @@ fn breath_first(start: Point2<i32>, end: Point2<i32>) -> Vec<Point2<i32>> {
         let neighbours = grid::neighbours(p);
 
         for n in neighbours.iter() {
-            if !came_from.contains_key(n) {
+            if !came_from.contains_key(n) && !walls.contains(&Wall::new(p, *n)) {
                 frontier.push_back(*n);
                 came_from.insert(*n, p);
             }
