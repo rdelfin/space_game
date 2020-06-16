@@ -1,9 +1,9 @@
 use crate::components::{
-    ButtonActionable, ButtonBuilding, GridPosition, Placing, Pressable, Pressed, Sprite,
+    ButtonActionable, ButtonBuilding, GridPosition, Placing, Pressable, Pressed, Sprite, Wall,
 };
 use crate::entities::BuildingFactory;
 use crate::resources::{MouseMode, MouseState};
-use crate::utils::grid;
+use crate::utils::{buildings, grid};
 
 use ggez::input::mouse::MouseButton;
 use ggez::nalgebra::Point2;
@@ -18,12 +18,14 @@ impl<'a> System<'a> for TileDragSystem {
         Write<'a, MouseState>,
         ReadStorage<'a, Placing>,
         WriteStorage<'a, GridPosition>,
+        WriteStorage<'a, Wall>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, updater, mut mouse_state, placing, mut grid_positions) = data;
-
         use specs::Join;
+
+        let (entities, updater, mut mouse_state, placing, mut grid_positions, mut walls) = data;
+
         for (entity, _, grid_position) in (&entities, &placing, &mut grid_positions).join() {
             grid_position.0 = grid::position_to_grid(mouse_state.position());
 
@@ -31,6 +33,9 @@ impl<'a> System<'a> for TileDragSystem {
                 if mouse_state.just_released(MouseButton::Left) {
                     mouse_state.mode = MouseMode::Free;
                     updater.remove::<Placing>(entity);
+                    // Update the walls. Logic can be a bit complicated so moving this
+                    // to a separate method
+                    buildings::update_walls(&mut walls, &entities, &updater, grid_position.0);
                 }
             }
         }
