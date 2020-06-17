@@ -1,7 +1,8 @@
 use crate::components::{GridPosition, PathFinder, Wall};
-use crate::resources::DeltaTime;
-use crate::utils::people as putils;
+use crate::resources::{DeltaTime, MouseMode, MouseState};
+use crate::utils::{grid as gutils, people as putils};
 
+use ggez::input::mouse::MouseButton;
 use specs::{Join, Read, ReadStorage, System, WriteStorage};
 use std::collections::HashSet;
 
@@ -32,6 +33,26 @@ impl<'a> System<'a> for PathMovementSystem {
 
                 if let Some(pos) = path.get(0) {
                     grid_position.0 = *pos
+                }
+            }
+        }
+    }
+}
+
+pub struct TargetSetSystem;
+
+impl<'a> System<'a> for TargetSetSystem {
+    type SystemData = (Read<'a, MouseState>, WriteStorage<'a, PathFinder>);
+
+    fn run(&mut self, data: Self::SystemData) {
+        let (mouse_state, mut path_finders) = data;
+
+        if let MouseMode::Free = mouse_state.mode {
+            if mouse_state.just_released(MouseButton::Right) {
+                for path_finder in (&mut path_finders).join() {
+                    let new_goal = gutils::position_to_grid(mouse_state.position());
+                    println!("New goal: {}", new_goal);
+                    path_finder.set_goal(new_goal);
                 }
             }
         }

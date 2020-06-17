@@ -62,6 +62,7 @@ impl<'a, 'b> MyGame<'a, 'b> {
         let mut dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .with(systems::SpriteAnimation, "sprite_animation", &[])
             .with(systems::ButtonPressSystem, "button_press", &[])
+            .with(systems::TargetSetSystem, "target_set", &[])
             .with(
                 systems::ButtonSpriteSystem,
                 "button_sprite",
@@ -77,7 +78,11 @@ impl<'a, 'b> MyGame<'a, 'b> {
                 "tile_drag",
                 &["tile_button_action"],
             )
-            .with(systems::PathMovementSystem, "path_movement", &[])
+            .with(
+                systems::PathMovementSystem,
+                "path_movement",
+                &["target_set"],
+            )
             .with(
                 systems::TilePositionSystem,
                 "tile_position",
