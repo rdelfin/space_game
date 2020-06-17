@@ -1,7 +1,7 @@
 use crate::components::{Animated, Sprite};
 use crate::resources::DeltaTime;
 
-use specs::{Read, System, WriteStorage};
+use specs::{Join, Read, System, WriteStorage};
 
 pub struct SpriteAnimation;
 
@@ -16,8 +16,6 @@ impl<'a> System<'a> for SpriteAnimation {
         let (delta, mut animations, mut sprites) = data;
 
         let delta = delta.0;
-
-        use specs::Join;
         for (animation, sprite) in (&mut animations, &mut sprites).join() {
             animation.frame_time += delta;
             if animation.frame_time >= animation.time_per_frame {

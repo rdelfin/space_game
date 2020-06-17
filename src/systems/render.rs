@@ -4,7 +4,7 @@ use crate::resources::ImageCache;
 use ggez::graphics::{self, DrawParam, Rect};
 use ggez::nalgebra::Vector2;
 use ggez::Context;
-use specs::{ReadStorage, System, Write};
+use specs::{Join, ReadStorage, System, Write};
 
 pub struct RenderSystem<'a> {
     ctx: &'a mut Context,
@@ -25,8 +25,6 @@ impl<'a, 'b> System<'b> for RenderSystem<'a> {
 
     fn run(&mut self, data: Self::SystemData) {
         let (mut img_cache, sprites, positions) = data;
-
-        use specs::Join;
         for (sprite, position) in (&sprites, &positions).join() {
             let frame_portion = Vector2::new(1.0, 1.0).component_div(&Vector2::new(
                 sprite.sheet_size.x as f32,

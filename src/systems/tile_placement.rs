@@ -7,7 +7,7 @@ use crate::utils::{buildings, grid};
 
 use ggez::input::mouse::MouseButton;
 use ggez::nalgebra::Point2;
-use specs::{Entities, LazyUpdate, Read, ReadStorage, System, Write, WriteStorage};
+use specs::{Entities, Join, LazyUpdate, Read, ReadStorage, System, Write, WriteStorage};
 
 pub struct TileDragSystem;
 
@@ -22,8 +22,6 @@ impl<'a> System<'a> for TileDragSystem {
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        use specs::Join;
-
         let (entities, updater, mut mouse_state, placing, mut grid_positions, mut walls) = data;
 
         for (entity, _, grid_position) in (&entities, &placing, &mut grid_positions).join() {
@@ -56,7 +54,6 @@ impl<'a> System<'a> for ButtonPressSystem {
     fn run(&mut self, data: Self::SystemData) {
         let (entities, updater, mouse_state, pressables, pressed_ones) = data;
         if mouse_state.just_pressed(MouseButton::Left) {
-            use specs::Join;
             for (entity, pressable, ()) in (&entities, &pressables, !&pressed_ones).join() {
                 if pressable.click_box.contains(mouse_state.position()) {
                     updater.insert(entity, Pressed);
@@ -65,7 +62,6 @@ impl<'a> System<'a> for ButtonPressSystem {
         }
 
         if mouse_state.just_released(MouseButton::Left) {
-            use specs::Join;
             for (entity, _, _) in (&entities, &pressables, &pressed_ones).join() {
                 updater.remove::<Pressed>(entity);
                 updater.insert(entity, ButtonActionable);
@@ -86,7 +82,6 @@ impl<'a> System<'a> for ButtonSpriteSystem {
     fn run(&mut self, data: Self::SystemData) {
         let (pressables, pressed_ones, mut sprites) = data;
 
-        use specs::Join;
         for (_, pressed, sprite) in (&pressables, (&pressed_ones).maybe(), &mut sprites).join() {
             sprite.curr_frame = Point2::new(
                 match pressed {
@@ -111,7 +106,6 @@ impl<'a> System<'a> for TileButtonActionSystem {
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        use specs::Join;
         let (entities, mut mouse_state, updater, actionables, button_buildings) = data;
 
         for (entity, _, button_building) in (&entities, &actionables, &button_buildings).join() {
